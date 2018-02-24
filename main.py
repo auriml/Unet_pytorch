@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('dataroot', help='path to dataset of kaggle ultrasound nerve segmentation')
 # parser.add_argument('dataroot', default='data', help='path to dataset')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=1)
-parser.add_argument('--batchSize', type=int, default=64, help='input batch size')
+parser.add_argument('--batchSize', type=int, default=32, help='input batch size')
 parser.add_argument('--niter', type=int, default=25, help='number of epochs to train for')
 parser.add_argument('--start_epoch', type=int, default=0, help='number of epoch to start')
 parser.add_argument('--lr', type=float, default=0.0002, help='learning rate, default=0.0002')
@@ -38,6 +38,7 @@ train_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batchSize,
 
 ############## create model
 model = Net(args.useBN)
+model = torch.nn.DataParallel(model)
 if args.cuda:
   model.cuda()
   cudnn.benchmark = True

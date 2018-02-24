@@ -7,17 +7,17 @@ def add_conv_stage(dim_in, dim_out, kernel_size=3, stride=1, padding=1, bias=Tru
     return nn.Sequential(
       nn.Conv2d(dim_in, dim_out, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
       nn.BatchNorm2d(dim_out),
-      nn.LeakyReLU(0.1),
+      nn.LeakyReLU(0.1,inplace=True),
       nn.Conv2d(dim_out, dim_out, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
       nn.BatchNorm2d(dim_out),
-      nn.LeakyReLU(0.1)
+      nn.LeakyReLU(0.1,inplace=True)
     )
   else:
     return nn.Sequential(
       nn.Conv2d(dim_in, dim_out, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
-      nn.ReLU(),
+      nn.ReLU(inplace=True),
       nn.Conv2d(dim_out, dim_out, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
-      nn.ReLU()
+      nn.ReLU(inplace=True)
     )
 
 def add_merge_stage(ch_coarse, ch_fine, in_coarse, in_fine, upsample):
@@ -32,7 +32,7 @@ def add_merge_stage(ch_coarse, ch_fine, in_coarse, in_fine, upsample):
 def upsample(ch_coarse, ch_fine):
   return nn.Sequential(
     nn.ConvTranspose2d(ch_coarse, ch_fine, 4, 2, 1, bias=False),
-    nn.ReLU()
+    nn.ReLU(inplace=True)
   )
 
 class Net(nn.Module):
